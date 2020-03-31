@@ -1,0 +1,299 @@
+buildscript {
+    repositories {
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.25.1'
+    }
+}
+
+repositories {
+    google()
+    maven { 
+        url 'https://maven.fabric.io/public' 
+    }
+}
+
+apply plugin: com.crashlytics.tools.gradle.CrashlyticsPlugin
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    // task verifyAppId {
+    //     doFirst {
+    //         println("Application Id : ${app_id}")
+
+    //         if (app_id.isEmpty()) {
+    //             throw new GradleException("'app_id' is Emptry")
+    //         }
+
+    //         if (app_id.equalsIgnoreCase("org.sunbird.app")) {
+    //             throw new GradleException("Don't use app_id as 'org.sunbird.app'")
+    //         }
+    //     }
+    // }
+    // verifyAppId.execute()
+}
+
+ext {
+    // To make minimum SDK as 21
+    // cdvMinSdkVersion = null
+    cdvVersionCode=Integer.parseInt('' + "${app_version_code}")
+}
+
+android {
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+    }
+
+    defaultConfig {
+        minSdkVersion 19
+        ext.buildNumber = System.getenv("TRAVIS_BUILD_NUMBER") ?: "local"
+        versionName "2.8.$ext.buildNumber"
+        manifestPlaceholders = [fabricKey: "${release_fabric_api_key}", fabricSecret: "${release_fabric_api_secret}"]
+        resValue("string", "_app_name", "${app_name}")
+        multiDexEnabled true
+
+        buildConfigField "boolean", "DISPLAY_FRAMEWORK_CATEGORIES_IN_PROFILE", "${display_framework_categories_in_profile}"
+        buildConfigField "boolean", "DISPLAY_SIGNIN_FOOTER_CARD_IN_COURSE_TAB_FOR_TEACHER", "${display_signin_footer_card_in_course_tab_for_teacher}"
+        buildConfigField "boolean", "DISPLAY_SIGNIN_FOOTER_CARD_IN_LIBRARY_TAB_FOR_TEACHER", "${display_signin_footer_card_in_library_tab_for_teacher}"
+        buildConfigField "boolean", "DISPLAY_SIGNIN_FOOTER_CARD_IN_PROFILE_TAB_FOR_TEACHER", "${display_signin_footer_card_in_profile_tab_for_teacher}"
+        buildConfigField "boolean", "DISPLAY_SIGNIN_FOOTER_CARD_IN_LIBRARY_TAB_FOR_STUDENT", "${display_signin_footer_card_in_library_tab_for_student}"
+        buildConfigField "boolean", "DISPLAY_SIGNIN_FOOTER_CARD_IN_PROFILE_TAB_FOR_STUDENT", "${display_signin_footer_card_in_profile_tab_for_student}"
+        buildConfigField "boolean", "TRACK_USER_TELEMETRY", "${track_user_telemetry}"
+        buildConfigField "boolean", "CONTENT_STREAMING_ENABLED", "${content_streaming_enabled}"
+        buildConfigField "boolean", "DISPLAY_ONBOARDING_CATEGORY_PAGE", "${display_onboarding_category_page}"
+        buildConfigField "boolean", "OPEN_RAPDISCOVERY_ENABLED", "${open_rapdiscovery_enabled}"
+        buildConfigField "String", "SUPPORT_EMAIL","\"${support_email}\""
+    }
+
+    signingConfigs {
+        release {
+
+        }
+    }
+
+    buildTypes {
+        release {
+            buildConfigField "boolean", "USE_CRASHLYTICS", "true"
+            ext.enableCrashlytics = true
+        }
+        debug{
+            buildConfigField "boolean", "USE_CRASHLYTICS", "false"
+            ext.enableCrashlytics = false
+        }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+         dev {
+            applicationId "${dev_app_id}"
+            flavorDimensions "default"
+            resValue("string", "deeplink_base_url", "${dev_deeplink_base_url}")
+            resValue("string", "deeplink_ncert_url", "${dev_deeplink_ncert_url}")
+            resValue("string", "custom_scheme_url", "${dev_custom_scheme}")
+            //resValue("string", "app_code_push_id", "${dev_app_code_push_id}")
+            buildConfigField 'String', 'BASE_URL', "\"${dev_base_url}\""
+            buildConfigField 'String', 'MERGE_ACCOUNT_BASE_URL', "\"${dev_merge_account_base_url}\""
+            buildConfigField 'String', 'PRODUCER_ID', "\"${dev_producer_id}\""
+            buildConfigField 'String', 'CHANNEL_ID', "\"${dev_channel_id}\""
+            buildConfigField 'int', 'MAX_COMPATIBILITY_LEVEL', "4"
+            buildConfigField 'String', 'MOBILE_APP_CONSUMER', '"mobile_device"'
+            buildConfigField 'String', 'MOBILE_APP_KEY', "\"${dev_mobile_app_key}\""
+            buildConfigField 'String', 'MOBILE_APP_SECRET', "\"${dev_mobile_app_secret}\""
+            buildConfigField 'String', 'OAUTH_SESSION', '"org.genie.KeycloakOAuthSessionService"'
+            buildConfigField "String", "OAUTH_REDIRECT_URL","\"${dev_oauth_redirect_url}\""
+        }
+
+        staging {
+            applicationId "${staging_app_id}"
+            flavorDimensions "default"
+            resValue("string", "deeplink_base_url", "${staging_deeplink_base_url}")
+            resValue("string", "deeplink_ncert_url", "${staging_deeplink_ncert_url}")
+            resValue("string", "custom_scheme_url", "${staging_custom_scheme}")
+            // resValue("string", "app_code_push_id", "${staging_app_code_push_id}")
+            buildConfigField 'String', 'BASE_URL', "\"${staging_base_url}\""
+            buildConfigField 'String', 'MERGE_ACCOUNT_BASE_URL', "\"${staging_merge_account_base_url}\""
+            buildConfigField 'String', 'PRODUCER_ID', "\"${staging_producer_id}\""
+            buildConfigField 'String', 'CHANNEL_ID', "\"${staging_channel_id}\""
+            buildConfigField 'int', 'MAX_COMPATIBILITY_LEVEL', "4"
+            buildConfigField 'String', 'MOBILE_APP_CONSUMER', '"mobile_device"'
+            buildConfigField 'String', 'MOBILE_APP_KEY', "\"${staging_mobile_app_key}\""
+            buildConfigField 'String', 'MOBILE_APP_SECRET', "\"${staging_mobile_app_secret}\""
+            buildConfigField 'String', 'OAUTH_SESSION', '"org.genie.KeycloakOAuthSessionService"'
+            buildConfigField "String", "OAUTH_REDIRECT_URL","\"${staging_oauth_redirect_url}\""
+        }
+
+        production {
+            applicationId "${production_app_id}"
+            flavorDimensions "default"
+            resValue("string", "deeplink_base_url", "${production_deeplink_base_url}")
+            resValue("string", "deeplink_ncert_url", "${production_deeplink_ncert_url}")
+            resValue("string", "custom_scheme_url", "${production_custom_scheme}")
+            //resValue("string", "app_code_push_id", "${production_app_code_push_id}")
+            buildConfigField 'String', 'BASE_URL', "\"${production_base_url}\""
+            buildConfigField 'String', 'MERGE_ACCOUNT_BASE_URL', "\"${production_merge_account_base_url}\""
+            buildConfigField 'String', 'PRODUCER_ID', "\"${production_producer_id}\""
+            buildConfigField 'String', 'CHANNEL_ID', "\"${production_channel_id}\""
+            buildConfigField 'int', 'MAX_COMPATIBILITY_LEVEL', "4"
+            buildConfigField 'String', 'MOBILE_APP_CONSUMER', '"mobile_device"'
+            buildConfigField 'String', 'MOBILE_APP_KEY', "\"${production_mobile_app_key}\""
+            buildConfigField 'String', 'MOBILE_APP_SECRET', "\"${production_mobile_app_secret}\""
+            buildConfigField 'String', 'OAUTH_SESSION', '"org.genie.KeycloakOAuthSessionService"'
+            buildConfigField "String", "OAUTH_REDIRECT_URL","\"${production_oauth_redirect_url}\""
+        }
+    }
+
+    task myclean(type: Delete,overwrite: true) {
+        def data
+        if (System.properties['os.name'].toLowerCase().contains('windows')) {
+            data = new File( "$rootDir\\app\\src\\main\\assets\\www\\assets\\data" )
+        } else {
+            data = new File( "$rootDir/app/src/main/assets/www/assets/data" )
+        }
+
+        if (data.exists() ) {
+            delete data
+            printf "deleted data"
+        }
+    }
+
+    task copyDirNotificationConfig(type: Copy,overwrite: true) {
+        if (System.properties['os.name'].toLowerCase().contains('windows')){
+            from "$rootDir\\app\\data\\notificationconfig"
+            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data"
+            println "inside copydir notificationconfig windows OS"
+        } else {
+            from "$rootDir/app/data/notificationconfig"
+            into "$rootDir/app/src/main/assets/www/assets/data"
+            println "inside copydir notificationconfig linux OS"
+        }
+    }
+
+    task copyDirFaq(type: Copy,overwrite: true) {
+        if (System.properties['os.name'].toLowerCase().contains('windows')){
+            from "$rootDir\\app\\data\\faq"
+            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data\\faq"
+            println "inside copydir faq windows OS"
+        } else {
+            from "$rootDir/app/data/faq"
+            into "$rootDir/app/src/main/assets/www/assets/data/faq"
+            println "inside copydir faq linux OS"
+        }
+    }
+
+    task copyDirContentRating(type: Copy,overwrite: true) {
+        if (System.properties['os.name'].toLowerCase().contains('windows')){
+            from "$rootDir\\app\\data\\content-rating"
+            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data\\content-rating"
+            println "inside copydir content-rating windows OS"
+        } else {
+            from "$rootDir/app/data/content-rating"
+            into "$rootDir/app/src/main/assets/www/assets/data/content-rating"
+            println "inside copydir content-rating linux OS"
+        }
+    }
+
+    task copyDirDev(type: Copy,overwrite: true) {
+        if (System.properties['os.name'].toLowerCase().contains('windows')){
+            from "$rootDir\\app\\data\\dev"
+            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data"
+            println "inside copydir dev windows OS"
+        } else {
+            from "$rootDir/app/data/dev"
+            into "$rootDir/app/src/main/assets/www/assets/data"
+            println "inside copydir dev linux OS"
+        }
+    }
+
+    task copyDirStaging(type: Copy,overwrite: true) {
+        if (System.properties['os.name'].toLowerCase().contains('windows')){
+            from "$rootDir\\app\\data\\staging"
+            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data"
+            println "inside copydir staging windows OS"
+        } else {
+            from "$rootDir/app/data/staging"
+            into "$rootDir/app/src/main/assets/www/assets/data"
+            println "inside copydir staging linux OS"
+        }
+    }
+
+    task copyDirProd(type: Copy,overwrite: true) {
+        if (System.properties['os.name'].toLowerCase().contains('windows')){
+            from "$rootDir\\app\\data\\prod"
+            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data"
+            println "inside copydir prod windows OS"
+        } else {
+            from "$rootDir/app/data/prod"
+            into "$rootDir/app/src/main/assets/www/assets/data"
+            println "inside copydir prod linux OS"
+        }
+    }
+
+    task dev(type: GradleBuild) {
+        tasks = ['myclean', 'copyDirDev', 'copyDirNotificationConfig', 'copyDirFaq', 'copyDirContentRating']
+    }      
+    task staging(type: GradleBuild) {
+        tasks = ['myclean', 'copyDirStaging', 'copyDirNotificationConfig', 'copyDirFaq', 'copyDirContentRating']
+    }
+    task prod(type: GradleBuild) {
+        tasks = ['myclean', 'copyDirProd', 'copyDirNotificationConfig', 'copyDirFaq', 'copyDirContentRating']
+    }
+
+    applicationVariants.all { variant ->
+        def flavor = variant.mergedFlavor
+        def name = flavor.getVersionName()
+        def flavorName = variant.properties.get('flavorName')
+        def versionName = name
+
+        if (flavorName.equals("dev")) {
+            preBuild.dependsOn(dev)
+            println "inside dev task"
+        }
+        if (flavorName.equals("staging")) {
+            preBuild.dependsOn(staging)
+            println "inside staging task"
+        }
+        if (flavorName.equals("production")) {
+            preBuild.dependsOn(prod)
+            println "inside production task"
+        }
+
+        if (!flavorName.equals("production")) {
+            versionName += ".0";
+        }
+        if (variant.buildType.isDebuggable()) {
+            versionName += '-debug';
+        }
+        flavor.versionName = versionName;
+        variant.buildConfigField("String", "REAL_VERSION_NAME", "\"${versionName}\"");
+        variant.outputs.each { output ->
+            // output.versionNameOverride = versionName
+            // output.outputFileName = new File(output.outputFile.parent, "${app_name}-".toLowerCase() + versionName + ".apk")
+            output.outputFileName = "${variant.name}-${variant.versionName}.apk"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.android.gms:play-services-analytics:10.+'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
+        transitive = true;
+    }
+}

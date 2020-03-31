@@ -1,0 +1,69 @@
+@import "src/assets/styles/variables.scss";
+
+.merged-input-container {
+    border: 1px solid $info-color;
+    display: flex;
+    flex: 1 1 auto;
+    border-radius: 4px;
+    .decorator {
+        display: inline-block;
+        max-width: 50px;
+    }
+    .custom {
+        display: inline-block;
+    }
+}
+
+.sb-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid red;
+    border-radius: 2px;
+}
+.sb-input-black {
+    @extend .sb-input;
+    border: 1px solid #333333;
+}
+
+.sb-input-info {
+    @extend .sb-input;
+    border: 1px solid $info-color;
+}
+
+.sb-input-danger {
+    @extend .sb-input;
+    border: 1px solid $danger-color;
+}
+
+input:focus {
+    outline: $info-color auto 1px;
+}
+.input-container {
+    border: 0.5px solid #333333;
+    padding: 8px;
+    border-radius: 3px;
+
+    .input {
+        border: #ffffff;
+        outline: none;
+    }
+
+    .input-icon {
+        float: right;
+        font-size: 20px;
+        color: #333333;
+    }
+}
+.showList {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-height: 200px;
+    overflow-y: scroll;
+
+    ul {
+        list-style-type: none;
+    }
+
+    li {
+        padding: 8px 0px 8px 8px;
+    }
+}

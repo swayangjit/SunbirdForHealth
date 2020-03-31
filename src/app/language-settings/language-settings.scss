@@ -1,0 +1,69 @@
+@import "src/assets/styles/_variables";
+@import "src/assets/styles/_custom-mixins";
+@import "src/assets/styles/fonts";
+:host {
+  /* This should be item-ios only as we are targeting mode as iOS for radio-button */
+  ion-item {
+    --ion-background-color: #{map-get($colors, white_f7)};
+  }
+
+  ion-icon {
+    @include rtl {
+      float: left !important;
+      left: 15px !important;
+    }
+    @include ltr {
+      float: right !important;
+      right: 15px !important;
+    }
+  }
+
+  ion-icon.arrow-icon{
+    position: absolute;
+    transform: translateY(-50%);
+    width: 22px;
+
+    @include rtl {
+      top: 33%;
+      transform: rotate(180deg);
+    }
+    @include ltr {
+      top: 50%;
+    }
+  }
+
+  .list-wrap {
+    margin-bottom: 8px;
+    padding-bottom: 16px;
+  }
+
+  ion-list[inset] {
+    margin: 0 !important;
+  }
+
+  /* Change height of the ion-item*/
+  ion-radio-group {
+    ion-item {
+      --min-height: 4rem !important;
+    }
+  }
+
+  .gray-color {
+    color: #{map-get($colors, secondary_black)};
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .item-radio-checked ion-label {
+    color: #{map-get($colors, primary_black)};
+    @extend .font-weight-700;
+  }
+
+  .arrow-icon {
+
+  }
+}
+
+.font-size-17 {
+  font-size: 17px !important;
+}

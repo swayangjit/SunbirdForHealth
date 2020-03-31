@@ -1,0 +1,36 @@
+@import "src/assets/styles/_variables.scss";
+
+.label {
+    font-size: 15px;
+}
+
+.ds-m0 {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.ds-item{
+    --padding-start: 0px
+}
+
+hr {
+    -webkit-margin-before: 16px;
+    height: 2px;
+    border-width: 0;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background-color: map-get($colors, medium_gray);
+}
+
+.item-block {
+    min-height: unset;
+    height: 3rem;
+}
+
+.item-radio input[type="radio"] {
+    display: none;
+}
+
+.item-md {
+    padding: 0 !important;
+}

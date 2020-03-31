@@ -1,0 +1,52 @@
+<ion-content padding>
+  <h6 class="gray-color" text-center>{{ 'ROLE_SELECTOR_QUERY' | translate }}</h6>
+
+  <!-- Student card -->
+  <ion-card (click)="selectStudentCard()" class="card-related-style" style="margin-top:20px"
+    [ngStyle]="{'border-color': studentCardBorderColor}">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <img class="thumbnail" alt="" [src]="studentImageUri" />
+        </ion-col>
+        <ion-col size="9">
+          <h4 class="card-title">{{ 'USER_TYPE_2' | translate }}</h4>
+          <ul class="description">
+            <li>{{ 'STUDENT_ROLE_DESC_1' | translate }}</li>
+          </ul>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <!-- Teacher card -->
+  <ion-card (click)="selectTeacherCard()" class="card-related-style"
+    [ngStyle]="{'border-color': teacherCardBorderColor}">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <img class="thumbnail" alt="" [src]="teacherImageUri" />
+        </ion-col>
+        <ion-col size="9">
+          <h4 class="card-title">{{ 'USER_TYPE_1' | translate }}</h4>
+          <ul class="description">
+            <li>{{ 'TEACHER_ROLE_DESC_1' | translate }}</li>
+            <li>{{ 'TEACHER_ROLE_DESC_2' | translate }}</li>
+            <li>{{ 'TEACHER_ROLE_DESC_3' | translate }}</li>
+          </ul>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- <p class="ion-padding-start black-color">{{ "IAM_ABOVE_18_YEARS_AGE" | translate }}</p> -->
+  </ion-card>
+
+</ion-content>
+
+<ion-footer padding no-border style="background: white;">
+  <button class="sb-btn sb-btn-md sb-btn-primary PR35 W100 ellipsis text-uppercase btn-block"
+    [style.background-color]="'#006DE5'" *ngIf="userTypeSelected" (click)="continue()">
+    {{continueAs}}
+    <ion-icon class="arrow-icon" name="arrow-round-forward"></ion-icon>
+  </button>
+
+</ion-footer>

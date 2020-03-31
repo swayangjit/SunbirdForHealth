@@ -1,0 +1,7 @@
+{
+  "name": "SunbirdEd-mobile-app",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

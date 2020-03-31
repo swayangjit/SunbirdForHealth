@@ -1,0 +1,68 @@
+@import "src/assets/styles/variables";
+@import "src/assets/styles/_custom-mixins";
+
+:host {
+  .card-related-style {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 6px !important;
+    margin-inline-start: unset !important;
+    margin-inline-end: unset !important;
+  }
+
+  .description {
+    color: map-get($colors, title);
+    font-size: 1rem;
+    line-height: 2rem;
+    font-weight: 500 !important;
+    @include padding(null, null, null, 35px !important);
+  }
+
+  .card-title {
+    @include padding(null, null, null, 10px !important);
+    font-weight: 700 !important;
+    font-size: 1.2rem;
+    color: map-get($colors, secondary_black);
+    margin-top: 10px !important;
+  }
+
+  .thumbnail {
+    width: 70px;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  .card-content-md {
+    @include padding(null, null, null, 0 !important);
+  }
+
+  ion-card {
+    background-color: map-get($colors, white_f7) !important;
+    @include margin(20px, 0, 0, 0 !important);
+    width: 100% !important;
+  }
+
+  ion-icon {
+    @include ltr {
+      float: right !important;
+    }
+    @include rtl {
+      float: left !important;
+    }
+  }
+
+  .arrow-icon {
+    right: 15px;
+    //position: absolute;
+    top: 50%;
+    //transform: translateY(-50%);
+    width: 22px;
+  }
+
+  .black-color {
+    color : black;
+  }
+  .gray-color {
+    color: map-get($colors, primary_black);
+  }
+}

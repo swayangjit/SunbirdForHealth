@@ -1,0 +1,66 @@
+@import "src/assets/styles/variables";
+@import "src/assets/styles/_custom-mixins";
+:host {
+  .permission-title {
+    color: #333333;
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .permission-container {
+    .item-row {
+      .icon-col {
+        @include ltr() {
+          border-right: 1px solid $gray-100;
+        }
+
+        @include rtl() {
+          border-left: 1px solid $gray-100;
+        }
+        min-width: 45px;
+        text-align: end;
+
+        ion-icon {
+          font-size: 3rem;
+        }
+      }
+
+      .title {
+        font-size: 14px;
+        color: #333333;
+        font-weight: bold;
+        line-height: 19px;
+      }
+      .description {
+        line-height: 19px;
+        font-size: 14px;
+        color: $gray-400;
+        margin: 0px !important;
+      }
+    }
+  }
+
+  .pl-16 {
+    @include padding(null, null, null, 16px);
+  }
+  .pt-0 {
+    @include padding(0 !important, null, null, null);
+  }
+  .pr-16 {
+    @include padding(null, 16px, null, null);
+  }
+
+  .btn-outline {
+    letter-spacing: normal;
+    border-width: 1px;
+    --border-width: 1px;
+  }
+}
+
+.permission-toggle {
+  --background: #{map-get($colors, light_gray) !important};
+  --background-checked: #{map-get($colors, secondary)};
+}
+
+.toggle-inner {
+  top: 0px !important;
+}
