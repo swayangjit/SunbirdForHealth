@@ -31,20 +31,6 @@ allprojects {
         }
     }
 
-    // task verifyAppId {
-    //     doFirst {
-    //         println("Application Id : ${app_id}")
-
-    //         if (app_id.isEmpty()) {
-    //             throw new GradleException("'app_id' is Emptry")
-    //         }
-
-    //         if (app_id.equalsIgnoreCase("org.sunbird.app")) {
-    //             throw new GradleException("Don't use app_id as 'org.sunbird.app'")
-    //         }
-    //     }
-    // }
-    // verifyAppId.execute()
 }
 
 ext {
@@ -100,51 +86,12 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-         dev {
-            applicationId "${dev_app_id}"
-            flavorDimensions "default"
-            resValue("string", "deeplink_base_url", "${dev_deeplink_base_url}")
-            resValue("string", "deeplink_ncert_url", "${dev_deeplink_ncert_url}")
-            resValue("string", "custom_scheme_url", "${dev_custom_scheme}")
-            //resValue("string", "app_code_push_id", "${dev_app_code_push_id}")
-            buildConfigField 'String', 'BASE_URL', "\"${dev_base_url}\""
-            buildConfigField 'String', 'MERGE_ACCOUNT_BASE_URL', "\"${dev_merge_account_base_url}\""
-            buildConfigField 'String', 'PRODUCER_ID', "\"${dev_producer_id}\""
-            buildConfigField 'String', 'CHANNEL_ID', "\"${dev_channel_id}\""
-            buildConfigField 'int', 'MAX_COMPATIBILITY_LEVEL', "4"
-            buildConfigField 'String', 'MOBILE_APP_CONSUMER', '"mobile_device"'
-            buildConfigField 'String', 'MOBILE_APP_KEY', "\"${dev_mobile_app_key}\""
-            buildConfigField 'String', 'MOBILE_APP_SECRET', "\"${dev_mobile_app_secret}\""
-            buildConfigField 'String', 'OAUTH_SESSION', '"org.genie.KeycloakOAuthSessionService"'
-            buildConfigField "String", "OAUTH_REDIRECT_URL","\"${dev_oauth_redirect_url}\""
-        }
-
-        staging {
-            applicationId "${staging_app_id}"
-            flavorDimensions "default"
-            resValue("string", "deeplink_base_url", "${staging_deeplink_base_url}")
-            resValue("string", "deeplink_ncert_url", "${staging_deeplink_ncert_url}")
-            resValue("string", "custom_scheme_url", "${staging_custom_scheme}")
-            // resValue("string", "app_code_push_id", "${staging_app_code_push_id}")
-            buildConfigField 'String', 'BASE_URL', "\"${staging_base_url}\""
-            buildConfigField 'String', 'MERGE_ACCOUNT_BASE_URL', "\"${staging_merge_account_base_url}\""
-            buildConfigField 'String', 'PRODUCER_ID', "\"${staging_producer_id}\""
-            buildConfigField 'String', 'CHANNEL_ID', "\"${staging_channel_id}\""
-            buildConfigField 'int', 'MAX_COMPATIBILITY_LEVEL', "4"
-            buildConfigField 'String', 'MOBILE_APP_CONSUMER', '"mobile_device"'
-            buildConfigField 'String', 'MOBILE_APP_KEY', "\"${staging_mobile_app_key}\""
-            buildConfigField 'String', 'MOBILE_APP_SECRET', "\"${staging_mobile_app_secret}\""
-            buildConfigField 'String', 'OAUTH_SESSION', '"org.genie.KeycloakOAuthSessionService"'
-            buildConfigField "String", "OAUTH_REDIRECT_URL","\"${staging_oauth_redirect_url}\""
-        }
-
         production {
             applicationId "${production_app_id}"
             flavorDimensions "default"
             resValue("string", "deeplink_base_url", "${production_deeplink_base_url}")
             resValue("string", "deeplink_ncert_url", "${production_deeplink_ncert_url}")
             resValue("string", "custom_scheme_url", "${production_custom_scheme}")
-            //resValue("string", "app_code_push_id", "${production_app_code_push_id}")
             buildConfigField 'String', 'BASE_URL', "\"${production_base_url}\""
             buildConfigField 'String', 'MERGE_ACCOUNT_BASE_URL', "\"${production_merge_account_base_url}\""
             buildConfigField 'String', 'PRODUCER_ID', "\"${production_producer_id}\""
@@ -208,30 +155,6 @@ android {
         }
     }
 
-    task copyDirDev(type: Copy,overwrite: true) {
-        if (System.properties['os.name'].toLowerCase().contains('windows')){
-            from "$rootDir\\app\\data\\dev"
-            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data"
-            println "inside copydir dev windows OS"
-        } else {
-            from "$rootDir/app/data/dev"
-            into "$rootDir/app/src/main/assets/www/assets/data"
-            println "inside copydir dev linux OS"
-        }
-    }
-
-    task copyDirStaging(type: Copy,overwrite: true) {
-        if (System.properties['os.name'].toLowerCase().contains('windows')){
-            from "$rootDir\\app\\data\\staging"
-            into "$rootDir\\app\\src\\main\\assets\\www\\assets\\data"
-            println "inside copydir staging windows OS"
-        } else {
-            from "$rootDir/app/data/staging"
-            into "$rootDir/app/src/main/assets/www/assets/data"
-            println "inside copydir staging linux OS"
-        }
-    }
-
     task copyDirProd(type: Copy,overwrite: true) {
         if (System.properties['os.name'].toLowerCase().contains('windows')){
             from "$rootDir\\app\\data\\prod"
@@ -244,12 +167,6 @@ android {
         }
     }
 
-    task dev(type: GradleBuild) {
-        tasks = ['myclean', 'copyDirDev', 'copyDirNotificationConfig', 'copyDirFaq', 'copyDirContentRating']
-    }      
-    task staging(type: GradleBuild) {
-        tasks = ['myclean', 'copyDirStaging', 'copyDirNotificationConfig', 'copyDirFaq', 'copyDirContentRating']
-    }
     task prod(type: GradleBuild) {
         tasks = ['myclean', 'copyDirProd', 'copyDirNotificationConfig', 'copyDirFaq', 'copyDirContentRating']
     }
@@ -260,14 +177,6 @@ android {
         def flavorName = variant.properties.get('flavorName')
         def versionName = name
 
-        if (flavorName.equals("dev")) {
-            preBuild.dependsOn(dev)
-            println "inside dev task"
-        }
-        if (flavorName.equals("staging")) {
-            preBuild.dependsOn(staging)
-            println "inside staging task"
-        }
         if (flavorName.equals("production")) {
             preBuild.dependsOn(prod)
             println "inside production task"
@@ -282,8 +191,6 @@ android {
         flavor.versionName = versionName;
         variant.buildConfigField("String", "REAL_VERSION_NAME", "\"${versionName}\"");
         variant.outputs.each { output ->
-            // output.versionNameOverride = versionName
-            // output.outputFileName = new File(output.outputFile.parent, "${app_name}-".toLowerCase() + versionName + ".apk")
             output.outputFileName = "${variant.name}-${variant.versionName}.apk"
         }
     }
