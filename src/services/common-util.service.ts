@@ -461,12 +461,12 @@ export class CommonUtilService implements OnDestroy {
             .then(async (response: Profile) => {
                 const profile = response;
                 const subscribeTopic = [];
-                subscribeTopic.push(profile.board[0]);
-                profile.medium.map(m => subscribeTopic.push(m));
-                await this.preferences.getString(PreferenceKey.DEVICE_LOCATION).subscribe((data) => {
-                    subscribeTopic.push(JSON.parse(data).state);
-                    subscribeTopic.push(JSON.parse(data).district);
-                });
+                // subscribeTopic.push(profile.board[0]);
+                profile.grade.map(m => subscribeTopic.push(m));
+                // await this.preferences.getString(PreferenceKey.DEVICE_LOCATION).subscribe((data) => {
+                //     subscribeTopic.push(JSON.parse(data).state);
+                //     subscribeTopic.push(JSON.parse(data).district);
+                // });
 
                 await this.preferences.getString(PreferenceKey.SUBSCRIBE_TOPICS).toPromise().then(async (data) => {
                     const previuslySubscribeTopics = JSON.parse(data);
