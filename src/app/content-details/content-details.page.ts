@@ -83,6 +83,7 @@ import { Components } from '@ionic/core/dist/types/components';
 })
 export class ContentDetailsPage implements OnInit, OnDestroy {
   appName: any;
+
   shouldOpenPlayAsPopup = false;
   apiLevel: number;
   appAvailability: string;
@@ -1242,16 +1243,16 @@ export class ContentDetailsPage implements OnInit, OnDestroy {
         url = 'file://' + pdf.url;
       }
 
-      await new Promise<boolean>((resolve, reject) => {
-        window.cordova.plugins.printer.canPrintItem(url, (canPrint: boolean) => {
+      /*await new Promise<boolean>((resolve, reject) => {
+        cordova.plugins.printer.canPrintItem(url, (canPrint: boolean) => {
           if (canPrint) {
-            window.cordova.plugins.printer.print(url);
+            cordova.plugins.printer.print(url);
             return resolve();
           }
 
           return reject('Could not print item');
         });
-      });
+      });*/
     } catch (e) {
       console.error(e);
       this.commonUtilService.showToast('ERROR_COULD_NOT_OPEN_FILE');
