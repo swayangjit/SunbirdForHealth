@@ -404,7 +404,7 @@ export class DistrictMappingPage {
           }
         }).catch(async () => {
           await loader.dismiss();
-          this.commonUtilService.showToast('PROFILE_UPDATE_FAILED');
+          // this.commonUtilService.showToast('PROFILE_UPDATE_FAILED');
           if (this.profile) {
             this.location.back();
           } else {
