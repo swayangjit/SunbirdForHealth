@@ -179,6 +179,7 @@ export class UserTypeSelectionPage implements OnInit {
         uid: this.profile.uid,
         handle: 'Guest1',
         syllabus: ['fw_for_health'],
+        medium: ['english'],
         profileType: ProfileType.TEACHER,
         source: ProfileSource.LOCAL
       };
