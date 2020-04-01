@@ -178,8 +178,9 @@ export class UserTypeSelectionPage implements OnInit {
       const profileRequest: Profile = {
         uid: this.profile.uid,
         handle: 'Guest1',
-        syllabus: ['fw_for_health'],
+        syllabus: ['fw_igot_1'],
         medium: ['english'],
+        grade: [this.selectedCategory.name],
         profileType: ProfileType.TEACHER,
         source: ProfileSource.LOCAL
       };
@@ -278,7 +279,7 @@ export class UserTypeSelectionPage implements OnInit {
       currentCategoryCode: FrameworkCategory.GRADE_LEVEL,
       language: this.translateService.currentLang,
       requiredCategories: categories,
-      frameworkId: 'fw_for_health'
+      frameworkId: 'fw_igot_1'
     };
     this.frameworkUtilService.getFrameworkCategoryTerms(request).toPromise().then((res: CategoryTerm[]) => {
       this.categoryData = res;
