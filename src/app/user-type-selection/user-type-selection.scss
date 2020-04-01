@@ -9,6 +9,9 @@
     margin-inline-start: unset !important;
     margin-inline-end: unset !important;
   }
+  .selected {
+    color: rgb(0, 109, 229);
+  }
 
   .description {
     color: map-get($colors, title);

@@ -41,7 +41,7 @@
 <!--  </ion-card>-->
 
   <ion-list *ngFor="let item of categoryData">
-    <ion-item (click)="itemClicked(item)">{{item.name}}</ion-item>
+    <ion-item (click)="itemClicked(item)" [ngClass]="item.selected == true?'selected':''">{{item.name}}</ion-item>
   </ion-list>
 </ion-content>
 

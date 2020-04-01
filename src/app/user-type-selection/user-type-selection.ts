@@ -49,6 +49,7 @@ export class UserTypeSelectionPage implements OnInit {
   private navParams: any;
   @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
   categoryData = [];
+  categoryDataForProfile = [];
 
 
   constructor(
@@ -282,12 +283,18 @@ export class UserTypeSelectionPage implements OnInit {
       frameworkId: 'fw_igot_1'
     };
     this.frameworkUtilService.getFrameworkCategoryTerms(request).toPromise().then((res: CategoryTerm[]) => {
-      this.categoryData = res;
+      this.categoryDataForProfile = res;
     });
+    this.categoryData = [{name:'Doctor',selected:false},{name:'Nurse',selected:false},{name:'Health Service Worker',selected:false},{name:'Sanitation Worker',selected:false},
+    {name:'Police',selected:false},{name:'Other',selected:false}];
   }
 
-  itemClicked(item: CategoryTerm) {
-    this.selectedCategory = item;
+  itemClicked(item: any) {
+    this.categoryData.forEach(categoryItem => {
+      categoryItem.selected = false;
+    });
+    item.selected = true;
+    this.selectedCategory = this.categoryDataForProfile[0];
     this.continueAs = this.commonUtilService.translateMessage(
         'CONTINUE_AS_ROLE',
         this.commonUtilService.translateMessage(item.name)
