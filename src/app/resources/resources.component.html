@@ -73,7 +73,7 @@
         </sb-library-cards-stack>
       </div>
     </div>
-    <div class="sb-explore-container" *ngIf="storyAndWorksheets && storyAndWorksheets.length !== 0">
+    <!--<div class="sb-explore-container" *ngIf="storyAndWorksheets && storyAndWorksheets.length !== 0">
       <div class="text-center" *ngIf="commonUtilService?.networkInfo?.isNetworkAvailable">
         <p class="information">{{'MORE_CONTENT' | translate:{'%s': appLabel} }}</p>
         <ion-button class="explore-more-content" outline (click)="exploreOtherContents()">
@@ -94,7 +94,7 @@
             {{'DATA' | translate}} </ion-button>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <div *ngIf="pageApiLoader && storyAndWorksheets && storyAndWorksheets.length === 0">
       <ion-list class="m-n" *ngIf="searchApiLoader && storyAndWorksheets && storyAndWorksheets.length === 0">
