@@ -172,6 +172,7 @@ export class UserTypeSelectionPage implements OnInit {
       const profileRequest: Profile = {
         uid: this.profile.uid,
         handle: 'Guest1',
+        syllabus: ['fw_for_health'],
         profileType: this.selectedUserType,
         source: ProfileSource.LOCAL
       };
