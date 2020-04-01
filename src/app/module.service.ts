@@ -90,9 +90,6 @@ export const GUEST_STUDENT_TABS = [
 
 export const GUEST_TEACHER_SWITCH_TABS = [
     LIBRARY_TAB,
-    COURSE_TAB,
-    SCANNER_TAB,
-    DOWNLOADS_TAB,
     GUEST_PROFILE_SWITCH_TAB
 ];
 
@@ -113,6 +110,7 @@ export const GUEST_STUDENT_SWITCH_TABS = [
 // ];
 
 export const initTabs = (container: ContainerService, tabs: Array<TabOptions>) => {
+    tabs = GUEST_TEACHER_SWITCH_TABS;
     container.removeAllTabs();
 
     if (tabs && tabs.length > 0) {
