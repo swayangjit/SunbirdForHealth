@@ -1,25 +1,30 @@
-import { Subscription } from 'rxjs';
-import { Component, Inject, NgZone, ViewChild, OnInit } from '@angular/core';
-import { IonRouterOutlet, Events, Platform } from '@ionic/angular';
-import { } from '@ionic/angular';
-import { Router, NavigationExtras } from '@angular/router';
-import { ProfileConstants, PreferenceKey, RouterLinks } from '@app/app/app.constant';
-import { AppGlobalService } from '@app/services/app-global-service.service';
-import { CommonUtilService } from '@app/services/common-util.service';
-import { TelemetryGeneratorService } from '@app/services/telemetry-generator.service';
-import { AppHeaderService } from '@app/services/app-header.service';
-import { Profile, ProfileService, ProfileSource, ProfileType, SharedPreferences, } from 'sunbird-sdk';
+import {Subscription} from 'rxjs';
+import {Component, Inject, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Events, IonRouterOutlet, Platform} from '@ionic/angular';
+import {NavigationExtras, Router} from '@angular/router';
+import {FrameworkCategory, PreferenceKey, ProfileConstants, RouterLinks} from '@app/app/app.constant';
+import {AppGlobalService} from '@app/services/app-global-service.service';
+import {CommonUtilService} from '@app/services/common-util.service';
+import {TelemetryGeneratorService} from '@app/services/telemetry-generator.service';
+import {AppHeaderService} from '@app/services/app-header.service';
 import {
-  Environment,
-  ImpressionType,
-  InteractSubtype,
-  InteractType,
-  PageId,
-} from '@app/services/telemetry-constants';
-import { ContainerService } from '@app/services/container.services';
-import { initTabs, GUEST_STUDENT_TABS, GUEST_TEACHER_TABS } from '@app/app/module.service';
-import { HasNotSelectedFrameworkGuard } from '@app/guards/has-not-selected-framework.guard';
-import { SplashScreenService } from '@app/services/splash-screen.service';
+  CategoryTerm,
+  FrameworkCategoryCode,
+  FrameworkCategoryCodesGroup,
+  FrameworkUtilService,
+  GetFrameworkCategoryTermsRequest,
+  Profile,
+  ProfileService,
+  ProfileSource,
+  ProfileType,
+  SharedPreferences,
+} from 'sunbird-sdk';
+import {Environment, ImpressionType, InteractSubtype, InteractType, PageId,} from '@app/services/telemetry-constants';
+import {ContainerService} from '@app/services/container.services';
+import {GUEST_TEACHER_TABS, initTabs} from '@app/app/module.service';
+import {HasNotSelectedFrameworkGuard} from '@app/guards/has-not-selected-framework.guard';
+import {SplashScreenService} from '@app/services/splash-screen.service';
+import {TranslateService} from "@ngx-translate/core";
 
 const selectedCardBorderColor = '#006DE5';
 const borderColor = '#F7F7F7';
@@ -33,7 +38,7 @@ const borderColor = '#F7F7F7';
 export class UserTypeSelectionPage implements OnInit {
   teacherCardBorderColor = '#F7F7F7';
   studentCardBorderColor = '#F7F7F7';
-  userTypeSelected = false;
+  selectedCategory?: CategoryTerm;
   selectedUserType: ProfileType;
   continueAs = '';
   profile: Profile;
@@ -43,6 +48,8 @@ export class UserTypeSelectionPage implements OnInit {
   teacherImageUri = 'assets/imgs/ic_teacher.png';
   private navParams: any;
   @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
+  categoryData = [];
+
 
   constructor(
     @Inject('PROFILE_SERVICE') private profileService: ProfileService,
@@ -57,7 +64,9 @@ export class UserTypeSelectionPage implements OnInit {
     private headerService: AppHeaderService,
     private router: Router,
     public frameworkGuard: HasNotSelectedFrameworkGuard,
-    private splashScreenService: SplashScreenService
+    private splashScreenService: SplashScreenService,
+    @Inject('FRAMEWORK_UTIL_SERVICE') private frameworkUtilService: FrameworkUtilService,
+    private translateService: TranslateService
   ) {
     this.getNavParams();
   }
@@ -89,6 +98,7 @@ export class UserTypeSelectionPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    this.getFrameWorkData();
     this.headerObservable = this.headerService.headerEventEmitted$.subscribe(eventName => {
       this.handleHeaderEvents(eventName);
     });
@@ -125,55 +135,51 @@ export class UserTypeSelectionPage implements OnInit {
     }
   }
 
-  selectTeacherCard() {
-    this.selectCard('USER_TYPE_1', ProfileType.TEACHER);
-  }
+  // selectTeacherCard() {
+  //   this.selectCard('USER_TYPE_1', ProfileType.TEACHER);
+  // }
+  //
+  // selectStudentCard() {
+  //   this.selectCard('USER_TYPE_2', ProfileType.STUDENT);
+  // }
 
-  selectStudentCard() {
-    this.selectCard('USER_TYPE_2', ProfileType.STUDENT);
-  }
-
-  selectCard(userType, profileType) {
-    this.zone.run(() => {
-      this.userTypeSelected = true;
-      this.teacherCardBorderColor = (userType === 'USER_TYPE_1') ? selectedCardBorderColor : borderColor;
-      this.studentCardBorderColor = (userType === 'USER_TYPE_1') ? borderColor : selectedCardBorderColor;
-      this.selectedUserType = profileType;
-      this.continueAs = this.commonUtilService.translateMessage(
-        'CONTINUE_AS_ROLE',
-        this.commonUtilService.translateMessage(userType)
-      );
-
-      this.preferences.putString(PreferenceKey.SELECTED_USER_TYPE, this.selectedUserType).toPromise().then();
-    });
-    const values = new Map();
-    values['userType'] = (this.selectedUserType).toUpperCase();
-    this.telemetryGeneratorService.generateInteractTelemetry(
-      InteractType.TOUCH,
-      InteractSubtype.USER_TYPE_SELECTED,
-      this.appGlobalService.isOnBoardingCompleted ? Environment.HOME : Environment.ONBOARDING,
-      PageId.USER_TYPE_SELECTION,
-      undefined,
-      values
-    );
-  }
+  // selectCard(userType, profileType) {
+  //   this.zone.run(() => {
+  //     this.userTypeSelected = true;
+  //     this.teacherCardBorderColor = (userType === 'USER_TYPE_1') ? selectedCardBorderColor : borderColor;
+  //     this.studentCardBorderColor = (userType === 'USER_TYPE_1') ? borderColor : selectedCardBorderColor;
+  //     this.selectedUserType = profileType;
+  //     this.continueAs = this.commonUtilService.translateMessage(
+  //       'CONTINUE_AS_ROLE',
+  //       this.commonUtilService.translateMessage(userType)
+  //     );
+  //
+  //     this.preferences.putString(PreferenceKey.SELECTED_USER_TYPE, this.selectedUserType).toPromise().then();
+  //   });
+  //   const values = new Map();
+  //   values['userType'] = (this.selectedUserType).toUpperCase();
+  //   this.telemetryGeneratorService.generateInteractTelemetry(
+  //     InteractType.TOUCH,
+  //     InteractSubtype.USER_TYPE_SELECTED,
+  //     this.appGlobalService.isOnBoardingCompleted ? Environment.HOME : Environment.ONBOARDING,
+  //     PageId.USER_TYPE_SELECTION,
+  //     undefined,
+  //     values
+  //   );
+  // }
 
   continue() {
-    this.generateInteractEvent(this.selectedUserType);
     // When user is changing the role via the Guest Profile screen
+    this.profile.profileType = ProfileType.TEACHER;
     if (this.profile !== undefined && this.profile.handle) {
       // if role types are same
-      if (this.profile.profileType === this.selectedUserType) {
-        this.gotoNextPage();
-      } else {
         this.gotoNextPage(true);
-      }
     } else {
       const profileRequest: Profile = {
         uid: this.profile.uid,
         handle: 'Guest1',
         syllabus: ['fw_for_health'],
-        profileType: this.selectedUserType,
+        profileType: ProfileType.TEACHER,
         source: ProfileSource.LOCAL
       };
       this.setProfile(profileRequest);
@@ -209,13 +215,7 @@ export class UserTypeSelectionPage implements OnInit {
   gotoNextPage(isUserTypeChanged: boolean = false) {
     // Update the Global variable in the AppGlobalService
     this.event.publish(AppGlobalService.USER_INFO_UPDATED);
-
-    if (this.selectedUserType === ProfileType.TEACHER) {
-      initTabs(this.container, GUEST_TEACHER_TABS);
-    } else if (this.selectedUserType === ProfileType.STUDENT) {
-      initTabs(this.container, GUEST_STUDENT_TABS);
-    }
-
+    initTabs(this.container, GUEST_TEACHER_TABS);
     if (this.appGlobalService.isProfileSettingsCompleted && this.appGlobalService.isOnBoardingCompleted) {
       this.navigateToTabsAsGuest();
     } else if (this.appGlobalService.DISPLAY_ONBOARDING_CATEGORY_PAGE) {
@@ -247,7 +247,7 @@ export class UserTypeSelectionPage implements OnInit {
    * @param params
    */
   updateProfile(page: string, params = {}) {
-    this.profile.profileType = this.selectedUserType;
+    this.profile.profileType = ProfileType.TEACHER;
     this.profileService.updateProfile(this.profile).toPromise()
       .then((res: any) => {
         if (page === 'TabsPage') {
@@ -269,5 +269,26 @@ export class UserTypeSelectionPage implements OnInit {
     const navigationExtras: NavigationExtras = { state: params };
     // this.router.navigate([`/${RouterLinks.SETTINGS}/${RouterLinks.PERMISSION}`], navigationExtras);
     this.router.navigate([RouterLinks.DISTRICT_MAPPING], navigationExtras);
+  }
+
+  getFrameWorkData() {
+    const categories: Array<FrameworkCategoryCode> = FrameworkCategoryCodesGroup.DEFAULT_FRAMEWORK_CATEGORIES;
+    const request: GetFrameworkCategoryTermsRequest = {
+      currentCategoryCode: FrameworkCategory.GRADE_LEVEL,
+      language: this.translateService.currentLang,
+      requiredCategories: categories,
+      frameworkId: 'fw_for_health'
+    };
+    this.frameworkUtilService.getFrameworkCategoryTerms(request).toPromise().then((res: CategoryTerm[]) => {
+      this.categoryData = res;
+    });
+  }
+
+  itemClicked(item: CategoryTerm) {
+    this.selectedCategory = item;
+    this.continueAs = this.commonUtilService.translateMessage(
+        'CONTINUE_AS_ROLE',
+        this.commonUtilService.translateMessage(item.name)
+    );
   }
 }
