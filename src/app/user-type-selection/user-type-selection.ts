@@ -219,12 +219,12 @@ export class UserTypeSelectionPage implements OnInit {
       this.navigateToTabsAsGuest();
     } else if (this.appGlobalService.DISPLAY_ONBOARDING_CATEGORY_PAGE) {
       if (isUserTypeChanged) {
-        this.updateProfile('PermissionPage', { showProfileSettingPage: true });
+        this.updateProfile('DistrictMappingPage', { isShowBackButton: true });
       } else {
-        this.navigateToPermissions({ showProfileSettingPage: true });
+        this.navigateToPermissions({ isShowBackButton: true });
       }
     } else {
-      this.updateProfile('PermissionPage', { showTabsPage: true });
+      this.updateProfile('DistrictMappingPage', { showTabsPage: true });
     }
   }
 
@@ -266,6 +266,7 @@ export class UserTypeSelectionPage implements OnInit {
 
   navigateToPermissions(params) {
     const navigationExtras: NavigationExtras = { state: params };
-    this.router.navigate([`/${RouterLinks.SETTINGS}/${RouterLinks.PERMISSION}`], navigationExtras);
+    // this.router.navigate([`/${RouterLinks.SETTINGS}/${RouterLinks.PERMISSION}`], navigationExtras);
+    this.router.navigate([RouterLinks.DISTRICT_MAPPING], navigationExtras);
   }
 }
