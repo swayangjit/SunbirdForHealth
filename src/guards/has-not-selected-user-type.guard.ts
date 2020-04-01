@@ -33,7 +33,7 @@ export class HasNotSelectedUserTypeGuard implements Resolve<any> {
                         forwardMigration: true
                     }
                 };
-                this.router.navigate(['/', 'profile-settings'], navigationExtras);
+                this.router.navigate(['/', 'district-mapping'], navigationExtras);
             } else {
                 return true;
             }
