@@ -1,6 +1,6 @@
 <ion-content>
   <form [formGroup]="guestEditForm">
-    <ion-list (ionChange)="onProfileTypeChange()" class="MT6">
+    <!--<ion-list (ionChange)="onProfileTypeChange()" class="MT6">
       <ion-radio-group formControlName="profileType">
 
         <ion-label class="type-label ion-text-uppercase">
@@ -19,22 +19,22 @@
           <ion-label [ngClass]="{'highlight-radio': guestEditForm?.value?.profileType === ProfileType.TEACHER }">
             {{ 'USER_TYPE_1' | translate | titlecase }}</ion-label>
           <ion-radio [value]="ProfileType.TEACHER" class="MR10" slot="start"></ion-radio>
-        </ion-item>
+        </ion-item>-->
         <!-- <p class="ion-padding-start" *ngIf="guestEditForm?.value?.profileType === ProfileType.TEACHER">
           {{ "IAM_ABOVE_18_YEARS_AGE" | translate }}</p> -->
-      </ion-radio-group>
-    </ion-list>
-    <ion-item class="ge-item-16">
+     <!-- </ion-radio-group>
+    </ion-list>-->
+    <!--<ion-item class="ge-item-16">
       <ion-label position="stacked" text-uppercase class="label-font ge-label">{{ 'NAME' | translate }}<ion-text>
           <span class="ge-danger">&nbsp;*</span>
         </ion-text>
       </ion-label>
       <ion-input formControlName="name" dir="{{commonUtilService.getAppDirection()}}"
         placeholder="{{'NAME_HINT' | translate }}"></ion-input>
-    </ion-item>
+    </ion-item>-->
 
     <!-- Syllabus -->
-    <ion-item class="ge-item-16" *ngIf="appGlobalService?.DISPLAY_FRAMEWORK_CATEGORIES_IN_PROFILE">
+    <!--<ion-item class="ge-item-16" *ngIf="appGlobalService?.DISPLAY_FRAMEWORK_CATEGORIES_IN_PROFILE">
       <ion-label position="stacked" text-uppercase class="label-font ge-label">{{'BOARD' | translate }} &lrm;<ion-text>
           <span class="ge-danger">&nbsp;*</span>
         </ion-text>
@@ -46,11 +46,11 @@
         <ion-select-option *ngFor="let eachSyllabus of syllabusList" value="{{eachSyllabus?.code}}">
           {{eachSyllabus?.name}}&lrm;</ion-select-option>
       </ion-select>
-    </ion-item>
+    </ion-item>-->
 
     <!-- Medium -->
     <ion-item class="ge-item-16" *ngIf="appGlobalService?.DISPLAY_FRAMEWORK_CATEGORIES_IN_PROFILE">
-      <ion-label position="stacked" text-uppercase class="label-font ge-label">{{'MEDIUM_OF_INSTRUCTION' | translate }}
+      <ion-label position="stacked" text-uppercase class="label-font ge-label">{{'HINT_LANGUAGE' | translate }}
         <ion-text>
           <span class="ge-danger">&nbsp;*</span>
         </ion-text>
@@ -67,7 +67,7 @@
 
     <!-- Grade -->
     <ion-item class="ge-item-16" *ngIf="appGlobalService?.DISPLAY_FRAMEWORK_CATEGORIES_IN_PROFILE">
-      <ion-label position="stacked" text-uppercase class="label-font ge-label">{{'CLASS' | translate }}<ion-text>
+      <ion-label position="stacked" text-uppercase class="label-font ge-label">{{'CHANGE_ROLE' | translate }}<ion-text>
           <span class="ge-danger">&nbsp;*</span>
         </ion-text>
       </ion-label>
@@ -82,7 +82,7 @@
     </ion-item>
 
     <!-- Subjects -->
-    <ion-item class="ge-item-16" *ngIf="appGlobalService?.DISPLAY_FRAMEWORK_CATEGORIES_IN_PROFILE">
+    <!--<ion-item class="ge-item-16" *ngIf="appGlobalService?.DISPLAY_FRAMEWORK_CATEGORIES_IN_PROFILE">
       <ion-label position="stacked" text-uppercase class="label-font ge-label">{{'SUBJECTS' | translate }}
       </ion-label>
       <ion-select multiple="true" [interfaceOptions]="subjectsOptions" text-capitalize
@@ -93,7 +93,7 @@
         <ion-select-option *ngFor="let subject of subjectList" text-capitalize value="{{subject?.code}}">
           {{subject?.name}}</ion-select-option>
       </ion-select>
-    </ion-item>
+    </ion-item>-->
 
   </form>
 </ion-content>
